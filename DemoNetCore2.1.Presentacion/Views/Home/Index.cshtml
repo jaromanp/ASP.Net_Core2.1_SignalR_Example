@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<script src="~/jquery/jquery.min.js"></script>
+<script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="~/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="table table-responsive">
+        <table id="tbl-productos" class="table table-bordered table-striped"></table>
+
+    </div>
+
+    <script>
+        
+        $(document).ready(function () {
+            fnCreateTable();
+        });
+        function fnCreateTable() {
+            var tabla = $('#tbl-productos')
+
+            $.ajax({
+                url: "/Home/GetListadoProductos",
+                type: "Get",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data.length > 0) {
+                        //alert("Se ha modificado un registro de la base de datos");
+                        tabla.empty();
+                        var thead = "<tr>";
+                        thead += "<th>ID Producto</th>";
+                        thead += "<th> Nombre</th>";
+                        thead += "<th> Precio</th>";
+                        thead += "<th> Stock</th>";
+                        thead += "</tr>";
+
+                        tabla.append(thead);
+
+                        var array = [];
+                        var tbody = "";
+
+                        for (var i = 0; i < data.length; i++) {
+                            tbody += "<tr>";
+                            tbody += "<td>" + data[i].id + "</td>";
+                            tbody += "<td>" + data[i].nombre + "</td>";
+                            tbody += "<td>" + data[i].precio + "</td>";
+                            tbody += "<td>" + data[i].stock + "</td>";
+                            tbody += "</tr>";
+                        }
+
+                        array.push(tbody);
+                        tabla.append(array.join(""));
+                        
+                    }
+
+
+                },
+                error: function (e) {
+                    console.error(e)
+                },
+            })
+        }
+
+        /* ----------Seccion de signalR-------- */
+        var connection = new signalR.HubConnectionBuilder().withUrl("/tablaHub").build();
+
+        ///Este metodo se pasa al producto repositorio
+        connection.on("ActualizarGrill", function () {
+            //Funcion ejecutada cuando hay un cambio en la base de datos
+            fnCreateTable();
+        });
+        connection.start().catch(function (e) {
+            console.error(e);
+        });
+    </script>
+
+
+
+</body>
+</html>
