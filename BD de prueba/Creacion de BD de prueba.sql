@@ -1,19 +1,19 @@
 CREATE TABLE Productos
 (
-	ProductID int identity(1,1)
-	constraint pk_producto primary key(ProductID),
-	Nombre varchar(100),
-	Precio decimal(8,2),
-	Stock int 
+	ProductID INT IDENTITY(1,1)
+	CONSTRAINT pk_producto PRIMARY KEY(ProductID),
+	Nombre VARCHAR(100),
+	Precio DECIMAL(8,2),
+	Stock INT 
 )
-go
+GO
 
-insert into Productos(Nombre, Precio, Stock) values ('Producto 1','5.2',100)
-insert into Productos(Nombre, Precio, Stock) values ('Producto 2','4.3',20)
-insert into Productos(Nombre, Precio, Stock) values ('Producto 3','22',80)
-insert into Productos(Nombre, Precio, Stock) values ('Producto 4','7',400)
-insert into Productos(Nombre, Precio, Stock) values ('Producto 5','14.2',300)
-insert into Productos(Nombre, Precio, Stock) values ('Producto 6','1.4',500)
+INSERT INTO Productos(Nombre, Precio, Stock) VALUES ('Producto 1','5.2',100)
+INSERT INTO Productos(Nombre, Precio, Stock) VALUES ('Producto 2','4.3',20)
+INSERT INTO Productos(Nombre, Precio, Stock) VALUES ('Producto 3','22',80)
+INSERT INTO Productos(Nombre, Precio, Stock) VALUES ('Producto 4','7',400)
+INSERT INTO Productos(Nombre, Precio, Stock) VALUES ('Producto 5','14.2',300)
+INSERT INTO Productos(Nombre, Precio, Stock) VALUES ('Producto 6','1.4',500)
 go
 
 CREATE PROC dbo.uspGetProductos
