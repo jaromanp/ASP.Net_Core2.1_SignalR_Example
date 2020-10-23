@@ -9,29 +9,27 @@
 </head>
 <body>
     <div>
-        <a href="@Url.Action("WithoutAPI", "Home")"><i class="alert" aria-hidden="true"></i> <p class="text-nav">Tabla con API</p> </a>
+        <a href="@Url.Action("Home", "Index")"><i class="alert" aria-hidden="true"></i> <p class="text-nav">Tabla con API</p> </a>
     </div>
     <div class="table table-responsive">
         <table id="tbl-productos" class="table table-bordered table-striped"></table>
-
     </div>
-
     <script>
-        
+
         $(document).ready(function () {
             fnCreateTable();
         });
-        function fnCreateTable(pData) {
+        function fnCreateTable() {
             var tabla = $('#tbl-productos')
 
             $.ajax({
-                url: "/Home/GetListadoProductos",
+                url: "/Home/GetListadoProductosWithoutAPI",
                 type: "Get",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (data) {
 
-                    if (data.result.length > 0) {
+                    if (data.length > 0) {
                         //alert("Se ha modificado un registro de la base de datos");
                         tabla.empty();
                         var thead = "<tr>";
@@ -46,20 +44,18 @@
                         var array = [];
                         var tbody = "";
 
-                        var obj = JSON.parse(data.result);
-
-                        for (var i = 0; i < obj.length; i++) {
+                        for (var i = 0; i < data.length; i++) {
                             tbody += "<tr>";
-                            tbody += "<td>" + obj[i].id + "</td>";
-                            tbody += "<td>" + obj[i].nombre + "</td>";
-                            tbody += "<td>" + obj[i].precio + "</td>";
-                            tbody += "<td>" + obj[i].stock + "</td>";
+                            tbody += "<td>" + data[i].id + "</td>";
+                            tbody += "<td>" + data[i].nombre + "</td>";
+                            tbody += "<td>" + data[i].precio + "</td>";
+                            tbody += "<td>" + data[i].stock + "</td>";
                             tbody += "</tr>";
                         }
 
                         array.push(tbody);
                         tabla.append(array.join(""));
-                        
+
                     }
 
 
@@ -74,22 +70,14 @@
         var connection = new signalR.HubConnectionBuilder().withUrl("/tablaHub").build();
 
         ///Este metodo se pasa al producto repositorio
-        //connection.on("ActualizarGrill", function () {
-        //    //Funcion ejecutada cuando hay un cambio en la base de datos
-        //    fnCreateTable();
-        //});
-        //function dataListener() {
-            connection.on("ActualizarGrill", (data) => {
-                fnCreateTable();
-            })
-        //}
-
+        connection.on("ActualizarGrill", function () {
+            //Funcion ejecutada cuando hay un cambio en la base de datos
+            fnCreateTable();
+        });
         connection.start().catch(function (e) {
             console.error(e);
         });
     </script>
-
-
 
 </body>
 </html>

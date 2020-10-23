@@ -32,26 +32,20 @@ namespace DemoNetCore2._1.API.Controllers
 
         }
 
-        [HttpGet]
-        [Route("ProductosSignal")]
-        public async Task<IActionResult> GetListadoProductosSignalAsync()
-        {
-            await _hub.Clients.All.SendAsync("Notify", $"Home page loaded at: {DateTime.Now}");
-            return new OkObjectResult(data);
+        //[HttpGet]
+        //[Route("ProductosSignal")]
+        //public async Task<IActionResult> GetListadoProductosSignalAsync()
+        //{
+        //    await _hub.Clients.All.SendAsync("Notify", $"Home page loaded at: {DateTime.Now}");
+        //    //return new OkObjectResult(data);
 
-        }
+        //}
 
         public IActionResult Get()
         {
             var data = _hub.Clients.All.SendAsync("ActualizarGrill", _productoServicio.Listado().ToList());
             return Ok(new { Message = "Request Completed" });
-        }
-
-        //[HttpGet]
-        //public ActionResult<IEnumerable<string>> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
+        }        
 
         // GET api/values
         [HttpGet]

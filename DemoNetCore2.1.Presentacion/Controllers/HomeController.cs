@@ -10,18 +10,22 @@ namespace DemoNetCore2._1.Presentacion.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly IProductoServicio _productoServicio;
+        private readonly IProductoServicio _productoServicio;
 
-        //public HomeController(IProductoServicio productoServicio)
-        //{
-        //    this._productoServicio = productoServicio;
-        //}
+        public HomeController(IProductoServicio productoServicio)
+        {
+            this._productoServicio = productoServicio;
+        }
 
         public IActionResult Index()
         {
             return View();
         }
 
+        public IActionResult WithoutAPI()
+        {
+            return View();
+        }
         public JsonResult GetListadoProductos()
         {
             using (var HttpClient = new HttpClient())
@@ -44,6 +48,12 @@ namespace DemoNetCore2._1.Presentacion.Controllers
             //var varResponseData = await Get
             //var data = _productoServicio.Listado().ToList();
             
+        }
+
+        public JsonResult GetListadoProductosWithoutAPI()
+        {
+            var data = _productoServicio.Listado().ToList();
+            return Json(data);
 
         }
 
